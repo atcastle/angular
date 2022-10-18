@@ -12,7 +12,7 @@ import {RuntimeErrorCode} from '../../errors';
 import {isPlatformServer} from '../../platform_id';
 
 import {imgDirectiveDetails} from './error_helper';
-import {IMAGE_LOADER} from './image_loaders/image_loader';
+import {IMAGE_LOADER, noopImageLoader} from './image_loaders/image_loader';
 import {LCPImageObserver} from './lcp_image_observer';
 import {PreconnectLinkChecker} from './preconnect_link_checker';
 import {PreloadLinkCreator} from './preload-link-creator';
@@ -430,7 +430,8 @@ export class NgOptimizedImage implements OnInit, OnChanges, OnDestroy {
 
     if (this.ngSrcset) {
       rewrittenSrcset = this.getRewrittenSrcset();
-    } else if (!this._disableOptimizedSrcset && !this.srcset) {
+    } else if (
+        !this._disableOptimizedSrcset && !this.srcset && this.imageLoader !== noopImageLoader) {
       rewrittenSrcset = this.getAutomaticSrcset();
     }
 
